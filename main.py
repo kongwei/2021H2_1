@@ -1,3 +1,6 @@
+from bigset import BigSet
+
+
 def skip_blanks(input_string, index):
     while index < len(input_string)\
             and input_string[index] == ' ':
@@ -30,17 +33,17 @@ def get_operator(input_string, index):
 def parse_range(range_string):
     numbers = range_string.split('-')
     if len(numbers) == 1:
-        return {int(numbers[0])}
+        return BigSet([int(numbers[0])])
     if len(numbers) == 2:
         start = int(numbers[0])
         end = int(numbers[1])
-        return set(range(start, end+1))
+        return BigSet(range(start, end+1))
     raise Exception('parse_range')
 
 
 def parse_sentence(sentence):
     sentence = sentence.split(',')
-    ret = set()
+    ret = BigSet()
     for x in sentence:
         ret = ret | parse_range(x)
     return ret
@@ -69,7 +72,7 @@ def do_operator(set_left, operator, set_right):
 def set_calc(input_string):
     index = 0
 
-    ret = set()
+    ret = BigSet()
     operator = 'or'
 
     while operator:
@@ -77,4 +80,4 @@ def set_calc(input_string):
         ret = do_operator(ret, operator, sentence)
         operator, index = get_operator(input_string, index)
 
-    return ret
+    return ret.to_string()
